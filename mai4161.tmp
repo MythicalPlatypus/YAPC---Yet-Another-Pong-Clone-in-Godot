@@ -1,0 +1,96 @@
+[gd_scene load_steps=12 format=3 uid="uid://b6ue74uf152dr"]
+
+[ext_resource type="Script" path="res://Ball.gd" id="1_lvbmo"]
+[ext_resource type="Texture2D" uid="uid://8fqdm7wg0u0" path="res://assets/ball.png" id="2_gvapy"]
+[ext_resource type="Texture2D" uid="uid://clp127fsysmel" path="res://assets/Paddle.png" id="3_msnwn"]
+[ext_resource type="Script" path="res://Paddle2.gd" id="4_mo7sd"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_3qfu8"]
+
+[sub_resource type="Gradient" id="Gradient_rcsec"]
+offsets = PackedFloat32Array(0.383117, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0, 0.40504, 0.407435, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_oiu0y"]
+gradient = SubResource("Gradient_rcsec")
+width = 320
+height = 180
+fill = 1
+fill_to = Vector2(1, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wpm3p"]
+size = Vector2(1.00232, 1.00313)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5gnd2"]
+radius = 7.35294
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dwywf"]
+size = Vector2(20, 62)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_6qhkd"]
+a = Vector2(628, 17)
+b = Vector2(17, 17)
+
+[node name="Node2D" type="Node2D"]
+metadata/_edit_horizontal_guides_ = [360.0]
+metadata/_edit_vertical_guides_ = [640.0]
+
+[node name="PlayArea" type="MeshInstance2D" parent="."]
+position = Vector2(320, 180)
+scale = Vector2(-607.593, 327.973)
+mesh = SubResource("BoxMesh_3qfu8")
+texture = SubResource("GradientTexture2D_oiu0y")
+
+[node name="Area2D" type="Area2D" parent="PlayArea"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayArea/Area2D"]
+shape = SubResource("RectangleShape2D_wpm3p")
+
+[node name="Ball" type="CharacterBody2D" parent="."]
+position = Vector2(304, 164)
+scale = Vector2(0.68, 0.68)
+script = ExtResource("1_lvbmo")
+
+[node name="BallSprite" type="Sprite2D" parent="Ball"]
+position = Vector2(24, 24)
+scale = Vector2(2, 2)
+texture = ExtResource("2_gvapy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ball"]
+position = Vector2(23.5294, 23.5294)
+shape = SubResource("CircleShape2D_5gnd2")
+
+[node name="Paddle" type="CharacterBody2D" parent="."]
+position = Vector2(45, 180)
+
+[node name="PaddleSprite" type="Sprite2D" parent="Paddle"]
+scale = Vector2(2, 2)
+texture = ExtResource("3_msnwn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Paddle"]
+shape = SubResource("RectangleShape2D_dwywf")
+
+[node name="Paddle2" type="CharacterBody2D" parent="."]
+position = Vector2(595, 180)
+script = ExtResource("4_mo7sd")
+
+[node name="PaddleSprite" type="Sprite2D" parent="Paddle2"]
+scale = Vector2(2, 2)
+texture = ExtResource("3_msnwn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Paddle2"]
+shape = SubResource("RectangleShape2D_dwywf")
+
+[node name="Floor_Ceiling" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor_Ceiling"]
+position = Vector2(-2, 0)
+shape = SubResource("SegmentShape2D_6qhkd")
+one_way_collision_margin = 0.0
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Floor_Ceiling"]
+position = Vector2(-2, 326)
+shape = SubResource("SegmentShape2D_6qhkd")
+one_way_collision_margin = 0.0
+
+[connection signal="body_exited" from="PlayArea/Area2D" to="Ball" method="_on_area_2d_body_exited"]
